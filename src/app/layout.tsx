@@ -137,7 +137,9 @@ export default function RootLayout({
               ✿
               <br />
               <a
-                href="mailto:josh.dunlap@stthomas.edu,fuen8236@stthomas.edu,reev2103@stthomas.edu?subject=%F0%9F%8C%BF%20Hello%20from%20a%20fellow%20plant%20lover%21%20%E2%9C%BF"
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=josh.dunlap%40stthomas.edu%2Cfuen8236%40stthomas.edu%2Creev2103%40stthomas.edu&su=%F0%9F%8C%BF%20Hello%20from%20a%20fellow%20plant%20lover%21%20%E2%9C%BF"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   color: "#fff7c2",
                   textDecoration: "underline",
