@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getPlantsScheduledOn } from "@/db/queries";
-import { Card, EmptyState, inputClass, SectionHeader } from "@/components/ui";
+import { Card, EmptyState, SectionHeader } from "@/components/ui";
+import { RetroDatePicker } from "@/components/RetroDatePicker";
 
 export const dynamic = "force-dynamic";
 
@@ -61,13 +62,7 @@ export default async function SchedulePage({
             >
               ★ Date
             </span>
-            <input
-              type="date"
-              name="date"
-              defaultValue={date}
-              className={inputClass}
-              required
-            />
+            <RetroDatePicker name="date" defaultValue={date} required />
           </label>
           <button type="submit" className="retro-btn btn-bevel">
             🔎 View

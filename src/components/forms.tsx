@@ -557,13 +557,7 @@ export function LogWateringForm({ plantId }: { plantId: number }) {
     <form action={action} className="space-y-3">
       <input type="hidden" name="plantId" value={plantId} />
       <Field label="Date">
-        <input
-          name="wateredOn"
-          type="date"
-          required
-          defaultValue={todayIso()}
-          className={inputClass}
-        />
+        <RetroDatePicker name="wateredOn" defaultValue={todayIso()} required />
       </Field>
       <Field label="Notes" hint="Optional">
         <textarea name="notes" rows={2} className={inputClass} />
@@ -584,7 +578,7 @@ export function ScheduleWateringForm({ plantId }: { plantId: number }) {
     <form action={action} className="space-y-3">
       <input type="hidden" name="plantId" value={plantId} />
       <Field label="Scheduled date">
-        <input name="scheduledDate" type="date" required className={inputClass} />
+        <RetroDatePicker name="scheduledDate" required />
       </Field>
       <button type="submit" disabled={pending} className={buttonClass}>
         {pending ? "Saving…" : "Schedule"}
@@ -611,13 +605,7 @@ export function LogFertilizationForm({ plantId }: { plantId: number }) {
         />
       </Field>
       <Field label="Date applied">
-        <input
-          name="dateApplied"
-          type="date"
-          required
-          defaultValue={todayIso()}
-          className={inputClass}
-        />
+        <RetroDatePicker name="dateApplied" defaultValue={todayIso()} required />
       </Field>
       <button type="submit" disabled={pending} className={buttonClass}>
         {pending ? "Saving…" : "Log fertilization"}
@@ -654,13 +642,7 @@ export function LogRepottingForm({
         label="Date"
         hint={currentPotSize ? `Previous pot size: ${currentPotSize}` : undefined}
       >
-        <input
-          name="repottedOn"
-          type="date"
-          required
-          defaultValue={todayIso()}
-          className={inputClass}
-        />
+        <RetroDatePicker name="repottedOn" defaultValue={todayIso()} required />
       </Field>
       <button type="submit" disabled={pending} className={buttonClass}>
         {pending ? "Saving…" : "Log repotting"}
@@ -678,12 +660,7 @@ export function LogHealthObservationForm({ plantId }: { plantId: number }) {
     <form action={action} className="space-y-3">
       <input type="hidden" name="plantId" value={plantId} />
       <Field label="Date">
-        <input
-          name="observationDate"
-          type="date"
-          defaultValue={todayIso()}
-          className={inputClass}
-        />
+        <RetroDatePicker name="observationDate" defaultValue={todayIso()} />
       </Field>
       <Field label="Observation">
         <textarea
