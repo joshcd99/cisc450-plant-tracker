@@ -110,21 +110,90 @@ async function uploadPlantPhoto(file: File, plantId: number): Promise<string> {
   return data.publicUrl;
 }
 
-// Map Postgres error codes to user-facing messages.
+// Postgres error shape we care about. Drizzle wraps these in DrizzleQueryError
+// with the original error on `.cause`, so we walk the chain to find it.
+type PgError = {
+  code?: string;
+  detail?: string;
+  constraint?: string;
+  table_name?: string;
+  column_name?: string;
+  message?: string;
+};
+
+function unwrapPgError(err: unknown, depth = 0): PgError | null {
+  if (depth > 5 || !err || typeof err !== "object") return null;
+  const e = err as PgError & { cause?: unknown };
+  if (typeof e.code === "string" && /^[0-9A-Z]{5}$/.test(e.code)) return e;
+  if (e.cause) return unwrapPgError(e.cause, depth + 1);
+  return null;
+}
+
+// Pull a "(column)=(value)" pair out of a unique-violation detail string,
+// e.g. "Key (species_name)=(Aloe Vera) already exists." → { column, value }.
+// For composite keys we hide internal `_id` columns so the user sees only
+// the human-meaningful field (e.g. "(location_id, room_name)" → "room name").
+function parseDetail(detail: string | undefined): { column: string; value: string } | null {
+  const m = detail?.match(/Key \(([^)]+)\)=\(([^)]+)\)/);
+  if (!m) return null;
+  const cols = m[1].split(",").map((c) => c.trim());
+  const vals = m[2].split(",").map((v) => v.trim());
+  const meaningful = cols
+    .map((c, i) => [c, vals[i] ?? ""] as const)
+    .filter(([c]) => !c.endsWith("_id"));
+  const pairs = meaningful.length > 0 ? meaningful : cols.map((c, i) => [c, vals[i] ?? ""] as const);
+  return {
+    column: pairs.map(([c]) => c).join(", ").replace(/_/g, " "),
+    value: pairs.map(([, v]) => v).join(", "),
+  };
+}
+
+// Translate a thrown error (Postgres or custom) into a user-facing message.
+// Never returns Drizzle's raw "Failed query: …" wrapper text.
 function friendlyError(err: unknown): string {
-  const e = err as { code?: string; message?: string };
-  switch (e.code) {
-    case "23505":
-      return "Already exists. Duplicate entry not allowed.";
-    case "23503":
-      return "Can't complete: referenced record is missing.";
-    case "23514":
-      return "Value is out of the allowed range.";
-    case "22P02":
-      return "Invalid value format.";
-    default:
-      return e.message ?? "Something went wrong.";
+  const pg = unwrapPgError(err);
+
+  if (pg) {
+    switch (pg.code) {
+      case "23505": {
+        // unique_violation
+        const parsed = parseDetail(pg.detail);
+        if (parsed) {
+          return `That ${parsed.column} already exists ("${parsed.value}"). Pick a different one.`;
+        }
+        return "An entry with those details already exists.";
+      }
+      case "23503":
+        // foreign_key_violation
+        return "Can't save: a referenced record is missing or was deleted.";
+      case "23502":
+        // not_null_violation
+        return pg.column_name
+          ? `${pg.column_name.replace(/_/g, " ")} is required.`
+          : "A required field is missing.";
+      case "23514":
+        // check_violation
+        return "A value is out of the allowed range.";
+      case "22P02":
+        // invalid_text_representation
+        return "Invalid value format. Please check your inputs.";
+      case "22001":
+        // string_data_right_truncation
+        return "A value is too long. Please shorten it.";
+      case "22008":
+      case "22007":
+        // datetime field overflow / invalid datetime
+        return "Invalid date. Please check the date you entered.";
+    }
   }
+
+  // Custom thrown Errors (from required() etc) have a clean message — use it,
+  // but never leak the Drizzle "Failed query: …" wrapper to the UI.
+  const e = err as { message?: string };
+  if (typeof e.message === "string" && !e.message.startsWith("Failed query")) {
+    return e.message;
+  }
+  return "Something went wrong. Please try again.";
 }
 
 // Req 1: add a new plant. Species, room, and location can each be
