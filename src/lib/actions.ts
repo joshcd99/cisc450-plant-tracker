@@ -52,7 +52,7 @@ async function regeneratePlantSchedule(
            (${baseDate}::date + (n * ${interval}::int))::date AS scheduled_date
       FROM generate_series(1, ${Math.ceil(SCHEDULE_HORIZON_DAYS / interval) + 1}) AS n
      WHERE (${baseDate}::date + (n * ${interval}::int))::date >  CURRENT_DATE
-       AND (${baseDate}::date + (n * ${interval}::int))::date <= CURRENT_DATE + ${SCHEDULE_HORIZON_DAYS}
+       AND (${baseDate}::date + (n * ${interval}::int))::date <= CURRENT_DATE + ${SCHEDULE_HORIZON_DAYS}::int
     ON CONFLICT (plant_id, scheduled_date) DO NOTHING
   `);
 }
@@ -206,7 +206,14 @@ export async function addPlant(_: FormState, formData: FormData): Promise<FormSt
         .where(eq(plants.plantId, inserted.plantId));
     }
 
-    await regeneratePlantSchedule(inserted.plantId, todayIsoLocal());
+    // The plant is already inserted; treat schedule regen as best-effort so
+    // a SQL hiccup here doesn't surface as a generic error after a successful
+    // add. The schedule rebuilds itself on the next watering log.
+    try {
+      await regeneratePlantSchedule(inserted.plantId, todayIsoLocal());
+    } catch (scheduleErr) {
+      console.error("Schedule regen failed after addPlant:", scheduleErr);
+    }
 
     revalidatePath("/");
     revalidatePath("/plants");
