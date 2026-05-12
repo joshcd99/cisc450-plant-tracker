@@ -1,0 +1,40 @@
+Plant Care Tracker: Source Code
+================================
+
+GitHub repository (public):
+  https://github.com/joshcd99/cisc450-plant-tracker
+
+Live production deployment:
+  https://plants.auriga.fyi/
+
+Group members:
+  Josh Dunlap, Aaron Fuentes, Nathan Reeves
+
+Course: CISC 450, Database Management Systems (Spring 2026)
+
+
+Running locally
+---------------
+The site is fully cloud-hosted, so a local build is optional. If you do
+want to run a copy locally against your own Postgres / Supabase:
+
+  1. git clone https://github.com/joshcd99/cisc450-plant-tracker.git
+  2. cd cisc450-plant-tracker
+  3. npm install
+  4. cp .env.example .env.local
+     (then fill in DATABASE_URL, DIRECT_URL, NEXT_PUBLIC_SUPABASE_URL,
+      SUPABASE_SERVICE_ROLE_KEY with values from your Supabase project)
+  5. Apply the schema and seed:
+       psql "$DATABASE_URL" -f supabase/schema.sql
+       psql "$DATABASE_URL" -f supabase/seed.sql
+     (Or paste each file into the Supabase Studio SQL editor.)
+  6. npm run dev
+  7. open http://localhost:3000
+
+Schema definition:
+  supabase/schema.sql:  all CREATE TABLE / INDEX / constraints
+
+Demo data:
+  supabase/seed.sql:    species, rooms, 12 plants with photos, 60 days
+                          of care history, and a year of forward-projected
+                          watering schedule.

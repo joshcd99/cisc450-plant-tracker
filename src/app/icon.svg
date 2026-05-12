@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background: cream tile with a dark-green hard border, like the cursor. -->
+  <rect x="1" y="1" width="30" height="30" fill="#fffce8" stroke="#1a3d10" stroke-width="2"/>
+
+  <!-- Pixely sparkle accents in two corners. -->
+  <rect x="3" y="3"  width="2" height="2" fill="#f7c948"/>
+  <rect x="27" y="27" width="2" height="2" fill="#ff52b1"/>
+
+  <!-- Main leaf — chunky, tilted, hard outlined to match the cursor pack. -->
+  <g transform="translate(16 18) rotate(-25)">
+    <path d="M -10 0
+             C -10 -7, -3 -11, 5 -11
+             C 9 -11, 11 -7, 11 -3
+             C 11 4, 4 9, -4 9
+             C -10 9, -10 4, -10 0 Z"
+          fill="#5b9b3d" stroke="#1a3d10" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Midrib + a few veins -->
+    <line x1="-10" y1="0" x2="10" y2="-1" stroke="#1a3d10" stroke-width="1.4" stroke-linecap="round"/>
+    <line x1="-5"  y1="-2" x2="-2" y2="-7" stroke="#1a3d10" stroke-width="1" stroke-linecap="round"/>
+    <line x1="0"   y1="-1" x2="3"  y2="-7" stroke="#1a3d10" stroke-width="1" stroke-linecap="round"/>
+    <line x1="5"   y1="0"  x2="8"  y2="-5" stroke="#1a3d10" stroke-width="1" stroke-linecap="round"/>
+    <line x1="-3"  y1="3"  x2="-6" y2="6"  stroke="#1a3d10" stroke-width="1" stroke-linecap="round"/>
+  </g>
+</svg>

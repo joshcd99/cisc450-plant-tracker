@@ -1,0 +1,44 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\title{Plant Care Tracker: Team Reflection}
+\author{Josh Dunlap, Aaron Fuentes, Nathan Reeves \\ CISC 450 (Spring 2026)}
+\date{}
+\begin{document}
+\maketitle
+\section*{Team Reflection}
+\subsection*{1. How did our group work together?}
+\begin{itemize}[leftmargin=*]
+  \item Group members and roles:
+  \begin{itemize}
+    \item \textbf{Josh Dunlap:} Assisted with schema design, set up cloud hosting infrastructure (Vercel, Supabase, GitHub), collaborated on website design. 
+    \item \textbf{Aaron Fuentes:} [your contributions]
+    \item \textbf{Nathan Reeves:} [your contributions]
+  \end{itemize}
+  \item Collaboration tools used: GitHub, Lucid, Teams
+  \item Workflow: Async commits along with collaborative work in class. Much of the work was done outside of class when we each had time separately.
+\end{itemize}
+\subsection*{2. How did we use AI?}
+\begin{itemize}[leftmargin=*]
+  \item We used Claude Code for website design and assistance conncting the front end to the database. See \texttt{AIprompts.pdf} for the full
+    disclosure.
+  \item Why we used it: time pressure, learning new technologies in a short time, desire to create a polished product that we could not have completed in this timeframe without AI.
+  \item What AI was good at: scaffolding Next.js and Drizzle,  generating Tailwind layouts, catching bugs in the original schema, debugging Vercel quirks
+  \item Where significant human intervention was required: database design decisions, choosing requirements scope, choosing the deployment stack, reviewing AI-written SQL for correctness, the schema  diagram in Lucid
+\end{itemize}
+\subsection*{3. Integration challenges}
+\begin{itemize}[leftmargin=*]
+    \item At one point, the TTFB for the production site ballooned to ~71 seconds. We spent a good amount of time chasing this issue and discovered that it was because we were running \texttt{CREATE TABLE IF NOT EXISTS} on every request. There were some UI elements that had their own queries to run that were held up by this one and prevented the whole page from loading. We fixed the slow-load issue by simply deleting the runtime \texttt{CREATE TABLE IF NOT EXISTS} query and moving it into a one-time setup SQL file instead.
+  \item Changes we made to the database design during implementation:
+  \begin{itemize}
+    \item Renamed all tables/columns to snake\_case.
+    \item Added real \texttt{PRIMARY KEY} constraints.
+    \item Added the missing foreign key from \
+    \item Replaced \texttt{CHAR(100)} with \texttt{VARCHAR(100)} / \texttt{TEXT} to avoid trailing
+      space padding.
+    \item Added \texttt{birthday} and \texttt{image\_url} to \texttt{plants}.
+  \end{itemize}
+  \item One of the biggest challenges in integrating a database into a software product was realizing just how \textit{integrated} everything is. For example, when we decided to add future waterings to the calendar, we thought we had everything we needed in the database and that it would be a simple front-end presentation change, but it turned out that this "simple" change actually required a number of changes across our schema and seed data.
+\end{itemize}
+\end{document}

@@ -1,0 +1,663 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   PLANT CARE TRACKER ★ RETRO EDITION ★
+   Inspired by GeoCities, Angelfire, Tripod, and personal-homepage CD-ROMs.
+   "Best viewed in Internet Explorer 6 at 1024x768"
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+  --leaf-light:  #dff3d5;
+  --leaf:        #5b9b3d;
+  --leaf-dark:   #2c5e1a;
+  --leaf-darker: #1a3d10;
+  --beige:       #fffce8;
+  --beige-dark:  #efe7c4;
+  --gold:        #f7c948;
+  --hot-pink:    #ff52b1;
+  --magenta:     #d6299e;
+  --sky:         #7ec8ff;
+  --grape:       #9b5dff;
+  --tomato:      #ff5a3c;
+
+  /* Win95 bevel palette */
+  --bevel-light: #ffffff;
+  --bevel-face:  #c0c0c0;
+  --bevel-dark:  #808080;
+  --bevel-darker: #000000;
+}
+
+/* ----- CUSTOM CURSORS ★ ----- */
+html,
+body,
+button,
+input,
+textarea,
+select,
+* {
+  cursor: url("/cursors/leaf-normal.cur"), auto;
+}
+a,
+a *,
+button:not(:disabled),
+button:not(:disabled) *,
+[role="button"],
+summary,
+.cursor-pointer,
+.cursor-pointer * {
+  cursor: url("/cursors/vine-precision.cur"), pointer !important;
+}
+button:disabled,
+button:disabled *,
+[disabled] {
+  cursor: url("/cursors/leaf-unavailable.cur"), not-allowed !important;
+}
+
+/* ----- BODY ★ retro tile background ----- */
+html, body {
+  /* Sparkle-trail nodes and floating decor are position:fixed and can land a
+     few px past the viewport on the right; clipping here prevents the
+     horizontal scrollbar / gap that otherwise appears. */
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+html { height: 100%; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Times New Roman", Times, Georgia, serif;
+  color: var(--leaf-darker);
+  background-color: var(--leaf-light);
+  background-image: url("/tile-bg.svg");
+  background-size: 64px 64px;
+  background-attachment: fixed;
+}
+
+/* ----- LINKS ★ true 2002 blue underline ----- */
+a {
+  color: #1a0dab;
+  text-decoration: underline;
+}
+a:visited { color: #6611cc; }
+a:hover   { color: var(--hot-pink); background: #fff7c2; }
+a:active  { color: var(--tomato); }
+
+/* ----- HEADINGS ★ Comic Sans ----- */
+h1, h2, h3, h4, h5, h6,
+.font-comic {
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", cursive;
+}
+
+/* ----- BLINK ★ the cardinal sin ----- */
+@keyframes retro-blink {
+  0%, 49% { visibility: visible; }
+  50%, 100% { visibility: hidden; }
+}
+.blink {
+  animation: retro-blink 1s steps(2, start) infinite;
+}
+
+/* Softer cousin: a gentle gold pulse for things that want attention without
+   the seizure-y on/off of the hard <blink>. */
+@keyframes retro-pulse {
+  0%, 100% {
+    color: #fff7c2;
+    text-shadow: 1px 1px 0 #000;
+  }
+  50% {
+    color: #ffd400;
+    text-shadow: 0 0 6px #ffd400, 1px 1px 0 #000;
+  }
+}
+.pulse {
+  animation: retro-pulse 2.4s ease-in-out infinite;
+}
+
+/* ----- RAINBOW ANIMATED TEXT ----- */
+@keyframes rainbow {
+  0%   { color: #ff0000; }
+  16%  { color: #ff8800; }
+  33%  { color: #ddcc00; }
+  50%  { color: #22cc22; }
+  66%  { color: #0088ff; }
+  83%  { color: #6633cc; }
+  100% { color: #ff0066; }
+}
+.rainbow {
+  animation: rainbow 3s linear infinite;
+  font-weight: 900;
+}
+
+/* ----- WORDART TITLE ★ ----- */
+.wordart {
+  font-family: "Comic Sans MS", "Impact", cursive;
+  font-weight: 900;
+  background: linear-gradient(90deg, #ff0000, #ff9900, #ffee00, #00cc44, #0099ff, #aa00ff, #ff0099);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 2px #000;
+  text-shadow:
+    3px 3px 0 #fff,
+    4px 4px 0 #000,
+    6px 6px 0 rgba(0,0,0,0.25);
+  letter-spacing: 1px;
+  animation: rainbow-shift 6s linear infinite;
+  line-height: 1.05;
+}
+@keyframes rainbow-shift {
+  to { background-position: 200% 0; }
+}
+
+/* ----- WINDOWS 95 "WINDOW" CHROME ----- */
+.win95 {
+  background: var(--bevel-face);
+  border-top: 2px solid var(--bevel-light);
+  border-left: 2px solid var(--bevel-light);
+  border-right: 2px solid var(--bevel-darker);
+  border-bottom: 2px solid var(--bevel-darker);
+  box-shadow: inset -1px -1px 0 var(--bevel-dark), inset 1px 1px 0 var(--bevel-face);
+  padding: 2px;
+}
+.win95-titlebar {
+  background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+  color: #fff;
+  font-family: "Tahoma", "Geneva", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 3px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-shadow: 1px 1px 0 #000;
+  letter-spacing: 0.5px;
+}
+.win95-titlebar .controls {
+  display: flex; gap: 2px;
+}
+.win95-titlebutton {
+  width: 16px; height: 14px;
+  background: var(--bevel-face);
+  border-top: 1px solid var(--bevel-light);
+  border-left: 1px solid var(--bevel-light);
+  border-right: 1px solid var(--bevel-darker);
+  border-bottom: 1px solid var(--bevel-darker);
+  color: #000;
+  font-family: "Marlett", sans-serif;
+  font-size: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  line-height: 1;
+}
+.win95-body {
+  background: var(--beige);
+  border-top: 1px solid var(--bevel-dark);
+  border-left: 1px solid var(--bevel-dark);
+  border-right: 1px solid var(--bevel-light);
+  border-bottom: 1px solid var(--bevel-light);
+  padding: 14px;
+  font-family: "Times New Roman", Times, serif;
+  color: var(--leaf-darker);
+}
+
+/* ----- BEVELED BUTTONS ★ ----- */
+.btn-bevel,
+button[type="submit"],
+button.retro-btn {
+  background: var(--bevel-face) !important;
+  color: #000 !important;
+  border-top: 2px solid var(--bevel-light) !important;
+  border-left: 2px solid var(--bevel-light) !important;
+  border-right: 2px solid var(--bevel-darker) !important;
+  border-bottom: 2px solid var(--bevel-darker) !important;
+  border-radius: 0 !important;
+  padding: 4px 14px !important;
+  font-family: "Tahoma", "Geneva", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+  box-shadow: 1px 1px 0 var(--bevel-dark) !important;
+}
+.btn-bevel:active,
+button[type="submit"]:active,
+button.retro-btn:active {
+  border-top: 2px solid var(--bevel-darker) !important;
+  border-left: 2px solid var(--bevel-darker) !important;
+  border-right: 2px solid var(--bevel-light) !important;
+  border-bottom: 2px solid var(--bevel-light) !important;
+  box-shadow: none !important;
+  transform: translate(1px, 1px);
+}
+
+/* ----- INPUTS ★ beveled inset ----- */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="search"],
+input:not([type]),
+textarea,
+select {
+  background: #fff !important;
+  color: #000 !important;
+  border-top: 2px solid var(--bevel-dark) !important;
+  border-left: 2px solid var(--bevel-dark) !important;
+  border-right: 2px solid var(--bevel-light) !important;
+  border-bottom: 2px solid var(--bevel-light) !important;
+  border-radius: 0 !important;
+  font-family: "Tahoma", "Geneva", sans-serif !important;
+  font-size: 13px !important;
+  box-shadow: inset 1px 1px 0 var(--bevel-darker) !important;
+  padding: 3px 6px !important;
+  transition: background-color 80ms;
+}
+/* Hover: gentle warm tint so users get feedback the field is interactive. */
+input[type="text"]:hover,
+input[type="number"]:hover,
+input[type="date"]:hover,
+input[type="email"]:hover,
+input[type="search"]:hover,
+input:not([type]):hover,
+textarea:hover,
+select:hover {
+  background: #fffce8 !important;
+}
+/* Focus: a visible 2px dotted ring inside the bevel (Win95 keyboard-focus
+   look) plus a gold border on top/left so the active field really pops. */
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible {
+  outline: 2px dotted #000 !important;
+  outline-offset: -4px !important;
+  background: #fffce8 !important;
+  border-top-color: var(--gold) !important;
+  border-left-color: var(--gold) !important;
+}
+/* Placeholder text in the period color. */
+input::placeholder,
+textarea::placeholder {
+  color: #7a7a7a !important;
+  font-style: italic;
+}
+
+/* Custom RetroSelect trigger: matches the hover/focus story of native inputs.
+   The component sets the bevel inline; we just add the cream-tint hover and
+   the dotted focus ring. */
+.retro-select-trigger:hover {
+  background: #fffce8 !important;
+}
+.retro-select-trigger:focus,
+.retro-select-trigger:focus-visible {
+  outline: 2px dotted #000 !important;
+  outline-offset: -4px !important;
+  background: #fffce8 !important;
+}
+
+/* ----- FILE INPUTS ★ Win95 "Browse..." button ----- */
+input[type="file"] {
+  font-family: "Tahoma", "Geneva", sans-serif !important;
+  font-size: 13px !important;
+  color: var(--leaf-darker) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+input[type="file"]::file-selector-button,
+input[type="file"]::-webkit-file-upload-button {
+  background: var(--bevel-face) !important;
+  color: #000 !important;
+  border-top: 2px solid var(--bevel-light) !important;
+  border-left: 2px solid var(--bevel-light) !important;
+  border-right: 2px solid var(--bevel-darker) !important;
+  border-bottom: 2px solid var(--bevel-darker) !important;
+  border-radius: 0 !important;
+  padding: 4px 14px !important;
+  margin-right: 10px !important;
+  font-family: "Tahoma", "Geneva", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  box-shadow: 1px 1px 0 var(--bevel-dark) !important;
+  cursor: url("/cursors/vine-precision.cur"), pointer !important;
+}
+input[type="file"]::file-selector-button:hover,
+input[type="file"]::-webkit-file-upload-button:hover {
+  background: #d4d0c8 !important;
+}
+input[type="file"]::file-selector-button:active,
+input[type="file"]::-webkit-file-upload-button:active {
+  border-top: 2px solid var(--bevel-darker) !important;
+  border-left: 2px solid var(--bevel-darker) !important;
+  border-right: 2px solid var(--bevel-light) !important;
+  border-bottom: 2px solid var(--bevel-light) !important;
+  box-shadow: none !important;
+}
+
+/* ----- RetroDatePicker text input (naked, no double bevel) ----- */
+/* The RetroDatePicker wraps a beveled container around a text input. Without
+   this override the inner <input type="text"> would pick up the global retro-
+   input bevel and we'd get a bevel-in-a-bevel. */
+input[type="text"].retro-date-text {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 3px 6px !important;
+  font-family: "Tahoma", "Geneva", sans-serif !important;
+  font-size: 13px !important;
+  color: #000 !important;
+  outline: none !important;
+}
+input[type="text"].retro-date-text:focus,
+input[type="text"].retro-date-text:focus-visible {
+  outline: 1px dotted #000 !important;
+  outline-offset: -2px !important;
+  background: #fffce8 !important;
+}
+
+/* ----- DATE INPUTS ★ retro calendar picker button ----- */
+/* Pad the input so the calendar button has room without crowding the digits. */
+input[type="date"] {
+  padding-right: 30px !important;
+  position: relative;
+}
+/* The little calendar icon at the right edge becomes a chunky gold Win95
+   button. We replace the default icon with a rendered emoji (📅) via an
+   SVG background and apply the standard bevel treatment so it matches the
+   rest of the UI. */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  background: var(--gold) !important;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text x='50%' y='12' text-anchor='middle' font-size='13' font-family='Tahoma,Geneva,sans-serif'>📅</text></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 14px 14px !important;
+  width: 22px !important;
+  height: 22px !important;
+  margin-right: -4px !important;
+  border-top: 2px solid var(--bevel-light) !important;
+  border-left: 2px solid var(--bevel-light) !important;
+  border-right: 2px solid var(--bevel-darker) !important;
+  border-bottom: 2px solid var(--bevel-darker) !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  opacity: 1 !important;
+  box-shadow: 1px 1px 0 var(--bevel-dark) !important;
+  cursor: url("/cursors/vine-precision.cur"), pointer !important;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  background-color: #fff7c2 !important;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:active {
+  border-top: 2px solid var(--bevel-darker) !important;
+  border-left: 2px solid var(--bevel-darker) !important;
+  border-right: 2px solid var(--bevel-light) !important;
+  border-bottom: 2px solid var(--bevel-light) !important;
+  box-shadow: none !important;
+}
+
+/* ----- MARQUEE ★ ----- */
+.retro-marquee {
+  background: #000;
+  color: var(--gold);
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
+  padding: 6px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  letter-spacing: 1px;
+}
+.retro-marquee-inner {
+  display: inline-block;
+  padding-left: 100%;
+  /* The animation translates by 100% of the inner element's OWN width, so
+     longer content = faster on-screen velocity at a fixed duration. Use the
+     CSS var to scale duration with content length. */
+  animation: marquee var(--marquee-duration, 35s) linear infinite;
+}
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+/* Reverse direction: scrolls left → right. Pair with `retro-marquee` for a
+   second adjacent ticker that goes the opposite way for peak 2002 chaos. */
+.retro-marquee-reverse .retro-marquee-inner {
+  animation-direction: reverse;
+}
+/* Slow modifier for tickers whose content is much longer than the welcome
+   marquee, e.g. the plant-names ticker that lists every plant 2-N times. */
+.retro-marquee-slow .retro-marquee-inner {
+  --marquee-duration: 90s;
+}
+/* Variant palette for the second ticker so the two don't look identical. */
+.retro-marquee-leafy {
+  background: #1a3d10;
+  color: #fff7c2;
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  font-family: "Comic Sans MS", cursive;
+  letter-spacing: 0;
+}
+/* The global a:hover rule paints a cream pill behind links, but the marquee
+   text is already cream, so hovering a name would render an invisible
+   rectangle. Override: no pill, just shift the text to gold and bold it. */
+.retro-marquee a:hover {
+  background: transparent !important;
+  color: var(--gold) !important;
+  text-shadow: 0 0 6px rgba(247, 201, 72, 0.7);
+}
+
+/* ----- "TOP BANNER" CONTAINER ----- */
+.outer-frame {
+  background: #000;
+  background-image:
+    repeating-linear-gradient(45deg, #1a3d10 0 8px, #2c5e1a 8px 16px);
+  padding: 10px;
+  border: 3px ridge var(--gold);
+}
+.inner-frame {
+  background: var(--beige);
+  border: 3px ridge var(--leaf-dark);
+  padding: 16px;
+}
+
+/* ----- SIDEBAR NAV ★ frames-era ----- */
+.retro-sidebar {
+  background: #003300;
+  background-image:
+    repeating-linear-gradient(180deg, #003300 0 2px, #002200 2px 4px);
+  color: #fff;
+  border-right: 4px ridge var(--gold);
+  padding: 12px 8px;
+}
+.retro-sidebar a {
+  display: block;
+  font-family: "Comic Sans MS", cursive;
+  font-weight: 700;
+  font-size: 14px;
+  background: linear-gradient(180deg, #fff7c2, #f7c948);
+  color: #1a3d10 !important;
+  border-top: 2px solid #fff7c2;
+  border-left: 2px solid #fff7c2;
+  border-right: 2px solid #7a5c00;
+  border-bottom: 2px solid #7a5c00;
+  padding: 6px 10px;
+  margin: 6px 0;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 2px 2px 0 #000;
+  text-shadow: 1px 1px 0 #fff;
+}
+.retro-sidebar a:hover {
+  background: linear-gradient(180deg, #ffd6f0, var(--hot-pink));
+  color: #4a0033 !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 #000;
+}
+.retro-sidebar a:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+.retro-sidebar .arrow {
+  display: inline-block;
+  animation: arrow-pulse 0.8s ease-in-out infinite alternate;
+}
+@keyframes arrow-pulse {
+  from { transform: translateX(0); }
+  to   { transform: translateX(4px); }
+}
+
+/* ----- SPINNING / WIGGLING ACCENTS ----- */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { display: inline-block; animation: spin-slow 6s linear infinite; }
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-6deg); }
+  50%      { transform: rotate(6deg); }
+}
+.wiggle { display: inline-block; animation: wiggle 1.5s ease-in-out infinite; }
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+.bob { display: inline-block; animation: bob 2s ease-in-out infinite; }
+
+/* ----- TABLES ★ chunky borders ----- */
+table {
+  border: 2px ridge var(--leaf-dark);
+  background: #fff;
+  font-family: "Tahoma", "Geneva", sans-serif;
+}
+th {
+  background: var(--leaf-dark) !important;
+  color: var(--gold) !important;
+  text-shadow: 1px 1px 0 #000;
+  font-family: "Comic Sans MS", cursive !important;
+  border: 1px ridge var(--gold) !important;
+  padding: 6px 10px !important;
+}
+td {
+  border: 1px solid var(--bevel-dark) !important;
+  padding: 5px 10px !important;
+}
+tr:nth-child(even) td { background: #f3fbe9; }
+tr:hover td { background: #fff7c2 !important; }
+
+/* ----- HIT COUNTER ----- */
+.hit-counter {
+  display: inline-flex;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 28px;
+  font-weight: 900;
+  background: #000;
+  color: #00ff00;
+  padding: 4px 8px;
+  border: 3px inset #444;
+  letter-spacing: 4px;
+  text-shadow: 0 0 4px #00ff00;
+}
+
+/* ----- SPARKLE CURSOR TRAIL DOT ----- */
+.sparkle-dot {
+  position: fixed;
+  pointer-events: none;
+  width: 12px;
+  height: 12px;
+  z-index: 9999;
+  user-select: none;
+  font-size: 14px;
+  line-height: 1;
+  animation: sparkle-fade 700ms linear forwards;
+}
+@keyframes sparkle-fade {
+  from { transform: translate(-50%, -50%) scale(1)   rotate(0deg);   opacity: 1; }
+  to   { transform: translate(-50%, -50%) scale(0.3) rotate(180deg); opacity: 0; }
+}
+
+/* ----- FLOATING BACKGROUND DECORATIONS ----- */
+.float-bg {
+  position: fixed;
+  pointer-events: none;
+  font-size: 24px;
+  opacity: 0.5;
+  animation: float-up 14s linear infinite;
+  z-index: 0;
+}
+@keyframes float-up {
+  from { transform: translateY(0) rotate(0deg); }
+  to   { transform: translateY(-120vh) rotate(720deg); }
+}
+
+/* ----- "NEW!" BADGE ----- */
+.badge-new {
+  display: inline-block;
+  background: red;
+  color: yellow;
+  font-family: "Impact", sans-serif;
+  font-size: 12px;
+  padding: 1px 5px;
+  border: 1px solid yellow;
+  text-shadow: 1px 1px 0 #000;
+  transform: rotate(-12deg);
+  animation: retro-blink 0.9s steps(2, start) infinite;
+}
+
+/* ----- DOT MARKERS (frames-era bullet GIFs in CSS) ----- */
+.dot-marker::before {
+  content: "★";
+  color: var(--gold);
+  margin-right: 4px;
+  text-shadow: 1px 1px 0 #000;
+}
+
+/* ----- DISABLE TAILWIND DEFAULT FOCUS RINGS (we have our own) ----- */
+*:focus { outline-offset: 0; }
+
+/* ----- VISIBLE LINK UNDERLINE EVEN IN BUTTONS THAT ARE LINKS ----- */
+a.retro-link-btn {
+  text-decoration: none;
+}
+
+/* ----- SCROLLBAR retro chunky ----- */
+::-webkit-scrollbar { width: 16px; height: 16px; }
+::-webkit-scrollbar-track {
+  background: var(--bevel-face);
+  border-left: 1px solid var(--bevel-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bevel-face);
+  border-top: 2px solid var(--bevel-light);
+  border-left: 2px solid var(--bevel-light);
+  border-right: 2px solid var(--bevel-darker);
+  border-bottom: 2px solid var(--bevel-darker);
+}
+::-webkit-scrollbar-corner { background: var(--bevel-face); }
+
+/* ----- HORIZONTAL "RULE" ★ rainbow gradient ----- */
+.rainbow-hr {
+  height: 4px;
+  border: 0;
+  background: linear-gradient(90deg, #ff0000, #ff9900, #ffee00, #00cc44, #0099ff, #6633cc, #ff0099);
+}
+
+/* ----- DROP SHADOW ON TEXT ----- */
+.text-shadow-retro {
+  text-shadow: 2px 2px 0 #fff, 3px 3px 0 var(--leaf-dark);
+}
+
+/* ----- BIG GREEN PANEL TITLES ----- */
+.panel-title {
+  font-family: "Comic Sans MS", cursive;
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--leaf-dark);
+  text-shadow: 2px 2px 0 #fff, 3px 3px 0 var(--gold);
+}
+
+/* ----- AVOID RING OUTLINES FIGHTING THE BEVEL ----- */
+.ring-2, [class*="ring-"] { box-shadow: none !important; }

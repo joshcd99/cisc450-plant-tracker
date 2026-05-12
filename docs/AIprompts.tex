@@ -1,0 +1,68 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\title{Plant Care Tracker: AI Tooling Disclosure}
+\author{Josh Dunlap, Aaron Fuentes, Nathan Reeves \\ CISC 450 (Spring 2026)}
+\date{}
+\begin{document}
+\maketitle
+\section*{AI Tooling Disclosure}
+\subsection*{Tool used}
+The development of this project's source code was assisted by \textbf{Claude
+Code}.
+\subsection*{Division of labor}
+We owned the parts of the project that involve thinking: the
+database design, the system requirements, every structural decision about
+how the data is modeled, and the visual/UX direction. Claude was used
+mainly to write the \emph{code} that implements those decisions.\\
+
+\noindent In particular, \textbf{the database side of the project was primarily our work}. We designed the ER model in Lucid, decided what columns and relationships should exist, chose which deletes should cascade vs
+restrict, and decided when to add new columns (e.g.\ \texttt{birthday} alongside
+\texttt{approx\_age}, \texttt{image\_url} for photo uploads) as new features came up.
+Claude's role on the database side was to review the schema and suggest
+fixes when issues came up during the build, and to write the migration
+SQL we decided on.
+\subsection*{What AI helped with}
+At a high level, Claude was used for:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Scaffolding the application:} initial Next.js project setup,
+    configuration for the ORM and the deployment, env-var wiring, and CLI
+    provisioning steps that are tedious but mechanical.
+  \item \textbf{Writing UI components} from team-provided layouts and feature
+    descriptions. We described what each page should do; Claude
+    produced the React/Tailwind components, which we then reviewed.
+  \item \textbf{Writing query and Server Action code} to back our specified
+    requirements. Claude translated ``we need a page that shows overdue
+    plants'' into actual SQL/Drizzle code; we reviewed for
+    correctness.
+  \item \textbf{Iterating on features} we requested during the build: the
+    retro visual overhaul, separating Location and Room as independent
+    attributes, the inline-create flow on the Add Plant form, the photo
+    upload, and so on. Each was driven by team direction.
+  \item \textbf{Debugging production and git issues,} most notably a 504-timeout problem
+    caused by schema-lock contention on cold function starts. Claude
+    analyzed the logs, proposed a hypothesis, and we confirmed and
+    approved the fix.
+  \item \textbf{\LaTeX{} scaffolds of the deliverable docs} which we completed.
+\end{itemize}
+\subsection*{Where human intervention was required}
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Database design end-to-end} was our domain. Every column,
+    relationship, and constraint in \texttt{schema.pdf} reflects our design,
+    not Claude's.
+  \item \textbf{Requirements interpretation:} the milestone-1 requirements PDF was
+    given to Claude as a fixed spec; bonus features (calendar view, search,
+    photo upload, retro UI) were our requested additions, not
+    Claude-initiated.
+  \item \textbf{Account-bound operations} Supabase project management, Vercel
+    deploys, and Lucid diagram editing were all done by us.
+  \item \textbf{The schema diagram} was produced in Lucid by us. Claude only
+    suggested specific edits for us to apply.
+  \item \textbf{The reflection document} was written by us using a \LaTeX{} template that Claude generated; the writing was done without AI assistance.
+\end{itemize}
+\subsection*{Statement}
+All AI-generated code was reviewed by at least one team member before
+being committed. The team is collectively responsible for the project's
+design, correctness, and academic integrity.
+\end{document}

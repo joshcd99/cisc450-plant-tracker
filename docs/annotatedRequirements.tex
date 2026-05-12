@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+
+\title{Plant Care Tracker: Annotated Requirements}
+\author{Josh Dunlap, Aaron Fuentes, Nathan Reeves \\ CISC 450 (Spring 2026)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}
+
+\item \textbf{A user can add a new plant, specifying its common name, species, approximate age, and location within the home.}
+A new plant is inserted into the \texttt{plants} table, with foreign keys to \texttt{species} (for species and recommended watering interval) and \texttt{room} (which is itself a child of \texttt{location}). Age can be stored either as \texttt{approx\_age} or as an exact \texttt{birthday} column.
+
+\item \textbf{A user can view a list of all plants, optionally filtered by room or location.}
+The plants list joins \texttt{plants}, \texttt{species}, \texttt{room}, and \texttt{location} and accepts optional \texttt{roomId} or \texttt{locationId} filters in a \texttt{WHERE} clause.
+
+\item \textbf{A user can record a watering event for a specific plant on a given date.}
+Each watering inserts a row into \texttt{watering\_event} with the \texttt{plant\_id} foreign key, the \texttt{watered\_on} date, and optional \texttt{notes}.
+
+\item \textbf{A user can view the full watering history for a specific plant, including dates and any notes recorded at the time of watering.}
+The plant detail page selects all rows from \texttt{watering\_event} for the given \texttt{plant\_id}, ordered by \texttt{watered\_on} descending, and renders the date and notes columns directly.
+
+\item \textbf{A user can view the last date a specific plant was watered and how many days ago that was.}
+A single query against \texttt{watering\_event} returns \texttt{MAX(watered\_on)} along with \texttt{CURRENT\_DATE - MAX(watered\_on)} for the days-ago value.
+
+\item \textbf{A user can enter a date and view all plants scheduled to be watered on that date.}
+The \texttt{watering\_schedule} table stores planned waterings as \texttt{(plant\_id, scheduled\_date)} rows; the schedule page joins this table against \texttt{plants} and filters by the chosen date.
+
+\item \textbf{A user can view all plants that are overdue for watering, based on the recommended watering interval defined for each species.}
+The dashboard query computes each plant's most recent watering date and compares \texttt{CURRENT\_DATE - last\_watered\_on} against \texttt{species.recomm\_water\_interval} to flag overdue plants.
+
+\item \textbf{A user can log a fertilization event for a plant, including the fertilizer type used and the date applied.}
+Each fertilization inserts a row into \texttt{fertilization\_event} with the \texttt{plant\_id} foreign key, the freeform \texttt{fert\_type}, and the \texttt{date\_applied}.
+
+\item \textbf{A user can log a repotting event for a plant, recording the date and the new pot size.}
+Each repotting inserts a row into \texttt{repotting\_event} (capturing previous pot size, new pot size, and date) and updates \texttt{plants.pot\_size} in the same transaction so the current pot stays in sync.
+
+\item \textbf{A user can add a freeform health observation to a plant, which is stored with a timestamp and viewable as a log.}
+Each observation inserts a row into \texttt{health\_observation} with the \texttt{plant\_id} foreign key, the date the observation was made in \texttt{observation\_date}, and the freeform text in \texttt{notes}.
+
+\item \textbf{A user can view a care summary for a specific plant showing the last watering, last fertilization, last repotting, and most recent health observation all in one view.}
+The detail page issues four parallel \texttt{ORDER BY date DESC LIMIT 1} queries (one per event table) and renders the results as four summary tiles above the log forms.
+
+\end{enumerate}
+
+\end{document}
