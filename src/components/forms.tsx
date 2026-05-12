@@ -127,6 +127,15 @@ export function AddPlantForm({
   locationList: Location[];
 }) {
   const [state, action, pending] = useActionState(addPlant, initialState);
+  const router = useRouter();
+
+  // On successful submit, jump to the new plant's detail page so the user can
+  // see their plant, the auto-generated schedule, and start logging events.
+  useEffect(() => {
+    if (state.ok && state.id) {
+      router.push(`/plants/${state.id}`);
+    }
+  }, [state.ok, state.id, router]);
 
   // Default to "existing" when records exist; fall back to inline-create otherwise.
   const [speciesMode, setSpeciesMode] = useState<SpeciesMode>(
