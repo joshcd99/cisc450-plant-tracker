@@ -82,9 +82,14 @@ function todayIso(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+
 // Per-plant prefix + timestamp filename so we can clean up by prefix later
 // and avoid collisions on re-photo.
 async function uploadPlantPhoto(file: File, plantId: number): Promise<string> {
+  if (file.size > MAX_PHOTO_BYTES) {
+    throw new Error("Photo is larger than 5 MB. Please choose a smaller file.");
+  }
   const ext = (file.name.split(".").pop() || "jpg").toLowerCase().slice(0, 5);
   const safeExt = ["jpg", "jpeg", "png", "webp"].includes(ext) ? ext : "jpg";
   const path = `plant-${plantId}/${Date.now()}.${safeExt}`;
