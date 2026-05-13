@@ -14,8 +14,9 @@ async function loadComicFont(): Promise<ArrayBuffer> {
     { headers: { "User-Agent": "Mozilla/5.0" } },
   );
   const css = await cssRes.text();
-  const match = css.match(/url\((https:\/\/[^)]+\.woff2)\)/);
-  if (!match) throw new Error("Could not locate Comic Neue woff2 URL");
+  // Google Fonts CSS returns either .woff2 or .ttf depending on UA; Satori reads both.
+  const match = css.match(/url\((https:\/\/[^)]+\.(?:woff2|ttf|otf))\)/);
+  if (!match) throw new Error("Could not locate Comic Neue font URL in CSS response");
   return (await fetch(match[1])).arrayBuffer();
 }
 
