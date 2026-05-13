@@ -13,9 +13,22 @@ import { HitCounterServer } from "@/components/HitCounterServer";
 import { PlantsMarquee } from "@/components/PlantsMarquee";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://plants.auriga.fyi"),
   title: "★彡 Plant Care Tracker 彡★ ~ My Greenhouse on the Web!!",
   description:
     "Welcome 2 my plant homepage!!! Track ur ferns ferns ferns. Best viewed in Internet Explorer 6 at 1024×768.",
+  openGraph: {
+    title: "Plant Care Tracker ★ CISC 450 Final Project",
+    description: "~*~ welcome 2 my greenhouse on the web!! ~*~",
+    type: "website",
+    url: "/",
+    siteName: "Plant Care Tracker",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Plant Care Tracker ★ CISC 450 Final Project",
+    description: "~*~ welcome 2 my greenhouse on the web!! ~*~",
+  },
 };
 
 // Force-dynamic because the visitor counter UPDATE on every render can't be
