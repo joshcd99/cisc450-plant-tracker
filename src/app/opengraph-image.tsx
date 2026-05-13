@@ -6,46 +6,27 @@ export const contentType = "image/png";
 export const alt = "Plant Care Tracker — CISC 450 final project";
 
 // Comic Sans MS is proprietary; Comic Neue is the free clone designed to
-// replace it. Fetched from Google Fonts so the WordArt actually has the
-// goofy rounded letterforms instead of Satori's default Noto Sans.
+// replace it. Fetched from Google Fonts at build time so the WordArt actually
+// has the goofy rounded letterforms instead of Satori's default Noto Sans.
 async function loadComicFont(): Promise<ArrayBuffer> {
   const cssRes = await fetch(
     "https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap",
     { headers: { "User-Agent": "Mozilla/5.0" } },
   );
   const css = await cssRes.text();
-  // Google Fonts CSS returns either .woff2 or .ttf depending on UA; Satori reads both.
+  // Google Fonts CSS returns .woff2, .ttf, or .otf depending on UA — Satori
+  // can read any of them.
   const match = css.match(/url\((https:\/\/[^)]+\.(?:woff2|ttf|otf))\)/);
   if (!match) throw new Error("Could not locate Comic Neue font URL in CSS response");
   return (await fetch(match[1])).arrayBuffer();
 }
 
-// Rainbow colors matching .wordart's CSS gradient (one per letter).
-const RAINBOW = [
-  "#ff0000", "#ff5500", "#ff9900", "#ffcc00", "#ffee00",
-  "#88cc22", "#00cc44", "#00aa88", "#0099ff", "#5566dd",
-  "#aa00ff", "#cc0099", "#ff0099",
-];
-
-// Build the title as a series of <tspan>s, one per letter, each in its own
-// rainbow color. Solid SVG fills — no background-clip:text trickery that
-// Satori can't render.
-function rainbowTspans(text: string) {
-  const letters = [...text];
-  let c = 0;
-  return letters.map((ch, i) => {
-    const color = ch === " " ? "transparent" : RAINBOW[c++ % RAINBOW.length];
-    return (
-      <tspan key={i} fill={color}>
-        {ch}
-      </tspan>
-    );
-  });
-}
-
+// Mirrors the site's top header. Satori does NOT support: SVG <text> nodes,
+// background-clip:text gradient fills, -webkit-text-stroke, or fallback-font
+// lookup for missing glyphs like ★. So we stick to solid colors and emojis
+// known to render via the embedded Twemoji set.
 export default async function OpengraphImage() {
   const comic = await loadComicFont();
-  const fontFamily = "Comic Neue";
 
   return new ImageResponse(
     (
@@ -54,154 +35,140 @@ export default async function OpengraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
+          padding: 20,
           backgroundColor: "#000",
+          backgroundImage:
+            "repeating-linear-gradient(45deg, #1a3d10 0 12px, #2c5e1a 12px 24px)",
+          fontFamily: "Comic Neue",
         }}
       >
-        <svg
-          width="1200"
-          height="630"
-          viewBox="0 0 1200 630"
-          xmlns="http://www.w3.org/2000/svg"
+        {/* Outer .outer-frame */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            border: "6px solid #ffd400",
+            padding: 10,
+            backgroundImage:
+              "repeating-linear-gradient(45deg, #1a3d10 0 12px, #2c5e1a 12px 24px)",
+          }}
         >
-          <defs>
-            {/* Diagonal-stripe pattern matching .outer-frame */}
-            <pattern
-              id="stripes"
-              width="20"
-              height="20"
-              patternUnits="userSpaceOnUse"
-              patternTransform="rotate(45)"
+          {/* Inner .inner-frame */}
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#fffce8",
+              border: "6px solid #1a3d10",
+              padding: "30px 50px",
+            }}
+          >
+            {/* WordArt title — chunky solid gold with stacked shadow to mimic .wordart */}
+            <div
+              style={{
+                display: "flex",
+                fontSize: 102,
+                fontWeight: 700,
+                letterSpacing: 1,
+                lineHeight: 1,
+                color: "#ffd400",
+                textShadow:
+                  "3px 3px 0 #fff, 5px 5px 0 #000, 8px 8px 0 #aa0000, 11px 11px 0 rgba(0,0,0,0.35)",
+              }}
             >
-              <rect width="10" height="20" fill="#1a3d10" />
-              <rect x="10" width="10" height="20" fill="#2c5e1a" />
-            </pattern>
-          </defs>
-
-          {/* Outer dark-green striped background */}
-          <rect width="1200" height="630" fill="url(#stripes)" />
-
-          {/* Gold ridge border (faked with two stacked rects) */}
-          <rect
-            x="22"
-            y="22"
-            width="1156"
-            height="586"
-            fill="none"
-            stroke="#ffd400"
-            strokeWidth="8"
-          />
-
-          {/* Cream inner panel with dark-green border */}
-          <rect
-            x="60"
-            y="60"
-            width="1080"
-            height="510"
-            fill="#fffce8"
-            stroke="#1a3d10"
-            strokeWidth="6"
-          />
-
-          {/* WordArt title — 3-layer drop shadow then per-letter rainbow */}
-          <g
-            fontFamily={fontFamily}
-            fontSize="96"
-            fontWeight="700"
-            textAnchor="middle"
-            style={{ letterSpacing: "2px" }}
-          >
-            {/* shadow layers, lightest → darkest, then white highlight, then fill */}
-            <text x="606" y="226" fill="rgba(0,0,0,0.25)">
               PLANT CARE TRACKER
-            </text>
-            <text x="604" y="224" fill="#000">
-              PLANT CARE TRACKER
-            </text>
-            <text x="603" y="223" fill="#fff">
-              PLANT CARE TRACKER
-            </text>
-            <text x="600" y="220" stroke="#000" strokeWidth="3">
-              {rainbowTspans("PLANT CARE TRACKER")}
-            </text>
-          </g>
+            </div>
 
-          {/* Subtitle in dark green Comic Neue with white drop-shadow */}
-          <g
-            fontFamily={fontFamily}
-            fontSize="34"
-            fontWeight="700"
-            textAnchor="middle"
-          >
-            <text x="602" y="302" fill="#fff">
-              ~*~ welcome 2 my greenhouse on the web!! ~*~
-            </text>
-            <text x="600" y="300" fill="#1a3d10">
-              ~*~ welcome 2 my greenhouse on the web!! ~*~
-            </text>
-          </g>
-
-          {/* Status row: red NEW! / rainbow CISC 450 / red HOT! badge */}
-          <g
-            fontFamily={fontFamily}
-            fontSize="30"
-            fontWeight="700"
-            textAnchor="middle"
-          >
-            <text x="320" y="380" fill="#ff0000">
-              ★ NEW! ★
-            </text>
-            <text x="600" y="380" stroke="#000" strokeWidth="1.5">
-              {rainbowTspans("CISC 450 FINAL PROJECT")}
-            </text>
-          </g>
-          {/* HOT! badge (red box + yellow Impact-style text) */}
-          <g>
-            <rect
-              x="820"
-              y="356"
-              width="92"
-              height="36"
-              fill="#ff0000"
-              stroke="#ffff00"
-              strokeWidth="2"
-            />
-            <text
-              x="866"
-              y="383"
-              fontFamily="Impact, sans-serif"
-              fontSize="26"
-              fontWeight="700"
-              textAnchor="middle"
-              fill="#ffff00"
+            {/* .font-comic subtitle in dark green */}
+            <div
+              style={{
+                display: "flex",
+                marginTop: 30,
+                fontSize: 36,
+                color: "#1a3d10",
+                fontWeight: 700,
+                textShadow: "2px 2px 0 #fff",
+              }}
             >
-              HOT!
-            </text>
-          </g>
+              ~*~ welcome 2 my greenhouse on the web!! ~*~
+            </div>
 
-          {/* Emoji row (Satori renders these via its embedded Twemoji set) */}
-          <g
-            fontSize="64"
-            textAnchor="middle"
-            dominantBaseline="middle"
-          >
-            <text x="540" y="470">🌱</text>
-            <text x="600" y="470">🌻</text>
-            <text x="660" y="470">🌿</text>
-          </g>
+            {/* Status row matching the header: NEW! / CISC 450 / HOT! */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 14,
+                marginTop: 26,
+              }}
+            >
+              <span
+                style={{
+                  display: "flex",
+                  fontSize: 30,
+                  fontWeight: 700,
+                  color: "#ff0000",
+                  textShadow: "1px 1px 0 #fff",
+                }}
+              >
+                NEW!
+              </span>
+              <span
+                style={{
+                  display: "flex",
+                  fontSize: 28,
+                  fontWeight: 700,
+                  color: "#000",
+                  backgroundColor: "#ffd400",
+                  padding: "6px 18px",
+                  border: "3px solid #5a2a00",
+                  letterSpacing: 1,
+                }}
+              >
+                CISC 450 FINAL PROJECT
+              </span>
+              <span
+                style={{
+                  display: "flex",
+                  fontSize: 26,
+                  fontFamily: "Impact, sans-serif",
+                  color: "#ffff00",
+                  backgroundColor: "#ff0000",
+                  padding: "4px 14px",
+                  border: "2px solid #ffff00",
+                  textShadow: "1px 1px 0 #000",
+                  letterSpacing: 1,
+                }}
+              >
+                HOT!
+              </span>
+            </div>
 
-          {/* URL footer */}
-          <text
-            x="600"
-            y="540"
-            fontFamily="monospace"
-            fontSize="20"
-            fontWeight="700"
-            fill="#5b9b3d"
-            textAnchor="middle"
-          >
-            plants.auriga.fyi
-          </text>
-        </svg>
+            {/* Bobbing emoji row */}
+            <div style={{ display: "flex", gap: 28, marginTop: 30, fontSize: 64 }}>
+              <span>🌱</span>
+              <span>🌻</span>
+              <span>🌿</span>
+            </div>
+
+            {/* URL footer */}
+            <div
+              style={{
+                display: "flex",
+                marginTop: 22,
+                fontSize: 20,
+                fontFamily: "monospace",
+                color: "#5b9b3d",
+                fontWeight: 700,
+              }}
+            >
+              plants.auriga.fyi
+            </div>
+          </div>
+        </div>
       </div>
     ),
     {
