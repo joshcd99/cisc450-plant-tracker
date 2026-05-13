@@ -5,9 +5,11 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Plant Care Tracker — CISC 450 final project";
 
-// Generated at build/request time by Satori. Only flexbox is supported (no
-// grid) and only a handful of CSS properties; the retro look is faked with
-// chunky text-shadows, ridge borders, and emoji.
+// Mirrors the site's top header: diagonal-stripe outer frame with a gold
+// border, beige inner panel with a green border, chunky drop-shadowed
+// WordArt-style title. Stars/dingbats are avoided because Satori's default
+// font doesn't carry those glyphs; we use the emoji that did render
+// (plant + flower) and lean on color/shadow for the retro feel.
 export default async function OpengraphImage() {
   return new ImageResponse(
     (
@@ -16,105 +18,128 @@ export default async function OpengraphImage() {
           width: "100%",
           height: "100%",
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "linear-gradient(135deg, #1a3d10 0%, #5b9b3d 60%, #2c5e1a 100%)",
-          padding: 40,
+          padding: 24,
+          backgroundColor: "#1a3d10",
+          backgroundImage:
+            "repeating-linear-gradient(45deg, #1a3d10 0 14px, #2c5e1a 14px 28px)",
         }}
       >
         <div
           style={{
-            width: "100%",
-            height: "100%",
+            flex: 1,
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 28,
-            background: "rgba(255, 252, 232, 0.06)",
-            border: "8px solid #ffd400",
-            boxShadow:
-              "inset 0 0 0 4px #5a2a00, inset 0 0 0 12px #ffd400, 0 0 0 4px #aa0000",
-            padding: "40px 60px",
+            border: "6px solid #ffd400",
+            padding: 14,
+            backgroundColor: "#1a3d10",
+            backgroundImage:
+              "repeating-linear-gradient(45deg, #1a3d10 0 14px, #2c5e1a 14px 28px)",
           }}
         >
-          <div style={{ display: "flex", gap: 32, fontSize: 96 }}>
-            <span>🌿</span>
-            <span>🪴</span>
-            <span>🌻</span>
-            <span>✿</span>
-            <span>🍃</span>
-          </div>
-
           <div
             style={{
+              flex: 1,
               display: "flex",
-              fontSize: 104,
-              fontWeight: 900,
-              color: "#ffd400",
-              textShadow:
-                "4px 4px 0 #aa0000, 8px 8px 0 #5a2a00, 12px 12px 0 rgba(0,0,0,0.4)",
-              letterSpacing: 2,
-              textAlign: "center",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#fffce8",
+              border: "6px solid #1a3d10",
+              padding: "40px 60px",
             }}
           >
-            ★ PLANT CARE TRACKER ★
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              fontSize: 42,
-              color: "#fff7c2",
-              fontStyle: "italic",
-              textAlign: "center",
-              textShadow: "3px 3px 0 rgba(0,0,0,0.6)",
-            }}
-          >
-            ~*~ welcome 2 my greenhouse on the web!! ~*~
-          </div>
-
-          <div style={{ display: "flex", gap: 16, marginTop: 8 }}>
-            <span
+            <div
               style={{
                 display: "flex",
-                fontSize: 28,
+                fontSize: 104,
                 fontWeight: 900,
-                color: "#000",
-                background: "#ffd400",
-                padding: "10px 22px",
-                border: "4px solid #5a2a00",
-                letterSpacing: 1,
+                color: "#ffd400",
+                textShadow:
+                  "4px 4px 0 #aa0000, 8px 8px 0 #000, 12px 12px 0 rgba(0,0,0,0.25)",
+                letterSpacing: 2,
               }}
             >
-              CISC 450 FINAL PROJECT
-            </span>
-            <span
+              PLANT CARE TRACKER
+            </div>
+
+            <div
               style={{
                 display: "flex",
-                fontSize: 28,
-                fontWeight: 900,
-                color: "#fff",
-                background: "#aa0000",
-                padding: "10px 22px",
-                border: "4px solid #5a0000",
-                letterSpacing: 1,
+                marginTop: 24,
+                fontSize: 38,
+                color: "#1a3d10",
+                fontStyle: "italic",
+                textShadow: "2px 2px 0 #fff",
               }}
             >
-              ★ NEW! ★
-            </span>
-          </div>
+              ~*~ welcome 2 my greenhouse on the web!! ~*~
+            </div>
 
-          <div
-            style={{
-              display: "flex",
-              fontSize: 22,
-              color: "#dff3d5",
-              fontFamily: "monospace",
-              marginTop: 14,
-            }}
-          >
-            plants.auriga.fyi
+            <div style={{ display: "flex", gap: 14, marginTop: 28 }}>
+              <span
+                style={{
+                  display: "flex",
+                  fontSize: 26,
+                  fontWeight: 900,
+                  color: "#fff",
+                  backgroundColor: "#aa0000",
+                  padding: "8px 18px",
+                  border: "3px solid #5a0000",
+                  letterSpacing: 1,
+                }}
+              >
+                NEW!
+              </span>
+              <span
+                style={{
+                  display: "flex",
+                  fontSize: 26,
+                  fontWeight: 900,
+                  color: "#000",
+                  backgroundColor: "#ffd400",
+                  padding: "8px 18px",
+                  border: "3px solid #5a2a00",
+                  letterSpacing: 1,
+                }}
+              >
+                CISC 450 FINAL PROJECT
+              </span>
+              <span
+                style={{
+                  display: "flex",
+                  fontSize: 26,
+                  fontWeight: 900,
+                  color: "#fff",
+                  backgroundColor: "#5b9b3d",
+                  padding: "8px 18px",
+                  border: "3px solid #1a3d10",
+                  letterSpacing: 1,
+                }}
+              >
+                HOT!
+              </span>
+            </div>
+
+            <div
+              style={{ display: "flex", gap: 22, marginTop: 26, fontSize: 60 }}
+            >
+              <span>🌱</span>
+              <span>🌻</span>
+              <span>🌿</span>
+              <span>🪴</span>
+              <span>🍃</span>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                marginTop: 22,
+                fontSize: 22,
+                fontFamily: "monospace",
+                color: "#5b9b3d",
+              }}
+            >
+              plants.auriga.fyi
+            </div>
           </div>
         </div>
       </div>
