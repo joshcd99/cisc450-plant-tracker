@@ -23,11 +23,13 @@ export const metadata: Metadata = {
     type: "website",
     url: "/",
     siteName: "Plant Care Tracker",
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Plant Care Tracker" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Plant Care Tracker ★ CISC 450 Final Project",
     description: "~*~ welcome 2 my greenhouse on the web!! ~*~",
+    images: ["/og.png"],
   },
 };
 
