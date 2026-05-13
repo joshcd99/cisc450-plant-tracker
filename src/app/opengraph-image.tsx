@@ -32,7 +32,9 @@ export default async function OpengraphImage() {
             justifyContent: "center",
             gap: 28,
             background: "rgba(255, 252, 232, 0.06)",
-            border: "10px ridge #ffd400",
+            border: "8px solid #ffd400",
+            boxShadow:
+              "inset 0 0 0 4px #5a2a00, inset 0 0 0 12px #ffd400, 0 0 0 4px #aa0000",
             padding: "40px 60px",
           }}
         >
